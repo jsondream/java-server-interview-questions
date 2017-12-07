@@ -13,8 +13,13 @@ HashMap的并发问题
 cloneable接口实现原理，浅拷贝or深拷贝   
 Java NIO使用   
 hashtable和hashmap的区别及实现原理，hashmap会问到数组索引，hash碰撞怎么解决   
-arraylist和linkedlist区别及实现原理   
-反射中，Class.forName和ClassLoader区别   
+arraylist和linkedlist区别及实现原理
+* 答：基于jdk1.7,ArrayList的底层是数组，而LinkedList的底层是双向链表。
+* 先说接口，ArrayList的实现的接口有List接口，也就是说它是有序集合，支持存取顺序一致，其次还实现随机访问接口，也就是RandomAccess，但这个接口里面没有要实现的方法，它只是一种暗示，意思就是说数组是带下标的，访问元素的时间复杂度是常数级的，知道下标就可以获取或者设置存取位置的值，但是插入和删除的时间复杂度是线性级的，原因要移动元素。还有实现了可克隆接口，以及序列化接口，也就是说arraylist可以用于对象传输，其次继承了AbstractList接口，里面有一些需要实现的增删改查方法，LinkedList实现了List接口，它也是有序集合，其次还实现双端队列接口，可以充当栈或者队列，但如果用于栈或者队列，ArrayDeque性能更好。LinkedList是双向链表。如果存取的null值，那么头尾指针都指向null,每个node节点头尾都有双向引用，引用也就是c/c++所谓的指针。
+* 然后说实现方法，arrayList的添加，是先判断容器是否容量足够，初始化是10个，注意的是，容量（capacity）跟集合的元素个数（size）不是一个概念，容量一般是大于元素个数的，如果容量不够，则会自动扩容，也就是大概扩容50%左右，不能说肯定扩容50%，公式是：新容量 = 原容量 + （原容量 >> 1）,然后调用工具类Arrays的copyof方法，实现数组之间的复制，而copyof方法调用的是System的copyof方法，System再调就是c/c++库了，我没办法看到System的具体实现方法。其实arrayList的remove方法也很巧妙，也是通过数组之间的复制来实现元素的删除的，具体的我忘了，而linkedList的add方法，只是修改前后两个元素的引用。删除方法同理，也就是改引用，arraylist则可能是移动元素的位置。而set和get方法，arraylist直接通过下标获取或者修改相应的值，linkedlist则需要从头或者尾开始遍历，至于从哪里开始遍历，它也是有公式的，就是比较index和（size >> 1）大小，集合右移一位，即接近中间值的值，如果索引比中间值大，则从尾部开始遍历，如果索引比中间值小，则从头部开始遍历。
+* 最后还有一些判断的方法，contain方法调用的是indexof方法，indexof方法里面也是遍历集合加判断元素是否存在的，不存在则返回-1。
+
+反射中，Class.forName和ClassLoader区别  
 String，Stringbuffer，StringBuilder的区别？   
 有没有可能2个不相等的对象有相同的hashcode   
 简述NIO的最佳实践，比如netty，mina   

@@ -1,7 +1,8 @@
 ## java基础   
 
-Arrays.sort实现原理和Collection实现原理   
-foreach和while的区别(编译之后)   
+1、Arrays.sort实现原理和Collections.sort实现原理。<br/>
+答：Collections.sort方法底层会调用Arrays.sort方法，底层实现都是TimeSort实现的。TimSort算法就是找到已经排好序数据的子序列，然后对剩余部分排序，然后合并起来.<br/>
+foreach和while的区别(编译之后)  
 线程池的种类，区别和使用场景   
 分析线程池的实现原理和线程的调度过程   
 线程池如何调优   

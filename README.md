@@ -1,7 +1,7 @@
 ## java基础   
 
 1.Arrays.sort实现原理和Collections.sort实现原理.<br/>
-答：Collections.sort方法底层会Arrays.sort方法，底层实现都是TimeSort实现的，这是jdk1.7新增的，以前是归并排序。TimSort算法就是找到已经排好序数据的子序列，然后对剩余部分排序，然后合并起来.</br>
+答：Arrays.sort()方法，如果数组长度大于等于286且连续升序和连续降序性好的话，就用归并排序，如果大于等于286且连续性不好的话就用双轴快速排序。如果长度小于286且大于等于47的话就用双轴快速排序，如果长度小于47的话就用插入排序.而Collections.sort实际上就是通过toArray方法转换成数组，然后调用TimSort方法，而不会调用LegacyMergeSort方法，即传统归并方法，而TimSort方法的核心思想就是找到数组中的有序子数组，将无序的单独出来排序，最后通过binarysort方法归并合成一个新数组，通过asList转换成集合返回。</br>
 foreach和while的区别(编译之后)  
 线程池的种类，区别和使用场景   
 分析线程池的实现原理和线程的调度过程   

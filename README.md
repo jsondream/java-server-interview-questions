@@ -1,12 +1,15 @@
 ## java基础   
 
-#### 1.Arrays.sort实现原理和Collections.sort实现原理.<br/>
-答：Arrays.sort()方法，如果数组长度大于等于286且连续升序和连续降序性好的话，就用归并排序，如果大于等于286且连续性不好的话就用双轴快速排序。如果长度小于286且大于等于47的话就用双轴快速排序，如果长度小于47的话就用插入排序.而Collections.sort实际上就是通过toArray方法转换成数组，然后调用TimSort方法，而不会调用LegacyMergeSort方法，即传统归并方法，而TimSort方法的核心思想就是找到数组中的有序子数组，将无序的单独出来排序，最后通过binarysort方法归并合成一个新数组，通过asList转换成集合返回。</br>
-#### 2、foreach和while的区别(编译之后)  </br>
-答：foreach 一次读取全部内容，while读一次显示一次，对于大数据量的操作建议使用while。 </br>
-线程池的种类，区别和使用场景   
-分析线程池的实现原理和线程的调度过程   
-线程池如何调优   
+#### 1.Arrays.sort实现原理和Collections.sort实现原理.
+答：Arrays.sort()方法，如果数组长度大于等于286且连续升序和连续降序性好的话，就用归并排序，如果大于等于286且连续性不好的话就用双轴快速排序。如果长度小于286且大于等于47的话就用双轴快速排序，如果长度小于47的话就用插入排序.而Collections.sort实际上就是通过toArray方法转换成数组，然后调用TimSort方法，而不会调用LegacyMergeSort方法，即传统归并方法，而TimSort方法的核心思想就是找到数组中的有序子数组，将无序的单独出来排序，最后通过binarysort方法归并合成一个新数组，通过asList转换成集合返回。
+#### 2、foreach和while的区别(编译之后)  
+答：foreach 一次读取全部内容，while读一次显示一次，对于大数据量的操作建议使用while。 
+#### 3、线程池的种类，区别和使用场景   
+答：常见的有四种，newCacheThreadPool,核心线程数初始化为0，最大线程数为Integer的最大值，非核心空闲线程的存活时间为60s,队列使用的是零缓存队列，任务来的时候直接给线程执行，不会阻塞,使用场景：执行时间短的异步任务。newFixThreadPool核心线程数等于最大线程数，其实最大线程数并没有多大作用，因为队列使用了LinkedBlockingQueue无界队列，所以当核心线程数小于任务数的时候，没有被执行的任务全部放在队列里，如果任务量足够大，就可能撑爆内存，非核心空闲线程的存活时间为0s，使用场景：执行时间长的任务,newScheduledThreadPool，周期线程池，corePoolSize为传递来的参数，maximumPoolSize为Integer.MAX_VALUE；keepAliveTime为0s,workQueue为：new DelayedWorkQueue() 一个按超时时间升序排序的队列,使用场景为周期性执行的任务，newSingleThreadExecutor，核心线程数和最大线程数都为一，非核心空闲线程的存活时间为0s,队列使用的是LinkedBlockingQueue无界队列，使用场景为一个一个的任务要有序执行。
+#### 4、分析线程池的实现原理和线程的调度过程
+答：
+
+线程池如何调优   
 线程池的最大线程数目根据什么确定   
 动态代理的几种方式   
 HashMap的并发问题   

@@ -19,8 +19,9 @@ getTask方法，判断是都允许核心线程数超时或者当前任务数大�
 线程池的五种状态：分别是running(可接收提交的任务，执行线程可处理任务，调用shutdown方法进入shutdown状态，调用shutdownNow方法会进入stop状态)，shutdown(不可接收提交的任务，执行线程可处理任务，调用shutdownNow方法会进入stop状态),stop(不可接收提交的任务，执行线程不可处理任务，),tidying（当stop状态的执行线程数为null并且队列没有任务时，调用tryTerminate方法进入terminated状态）,terminated（对执行线程和队列任务会回收完毕）.
 
 
-##### 线程池如何调优   
-线程池的最大线程数目根据什么确定   
+#### 5、线程池如何调优 
+
+#### 6、线程池的最大线程数目根据什么确定   
 动态代理的几种方式   
 HashMap的并发问题   
 了解LinkedHashMap的应用吗  

@@ -34,10 +34,16 @@ getTask方法，判断是都允许核心线程数超时或者当前任务数大�
 #### 7、动态代理的几种方式（如何实现？缓存？字节码？反射机制还是fastClass机制？）
 1、动态代理也称运行时增强技术，动态代理方式我了解的有：jdk动态代理，cglib动态代理，javassist动态代理。</br>
 
-jdk动态代理的代理类必须实现invacationHandler接口，重写invoke方法这个目标方法，获取最终代理类是通过调用Proxy的静态方法newProxyInstance，传入三个参数，分别是目标类的类加载器，目标类的接口数组，和代理类的对象。</br>
+jdk动态代理的代理类必须实现invacationHandler接口，重写invoke方法，获取最终代理类是通过调用Proxy的静态方法newProxyInstance，传入三个参数，分别是目标类的类加载器，目标类的接口数组，和代理类的对象。</br>
+
 cglib:cglib动态代理的代理类实现MethodInterceptor接口，重写intercept方法，获取最终代理类过程是创建一个增强器，然后设置目标类，设置拦截对象，最后调用增强器对象的create方法返回一个代理类。</br>
+
 缓存：它们都将数据以key-value的形式存在缓存中，获取代理类对象一般先判断缓存中是否存在，如果不存在才通过方法反射（jdk动态代理）或者方法索引（cglib ）的方式得到。</br>
-字节码底层：cglib的fastClass机制是对目标类的方法设置索引，然后通过索引直接调用目标类的方法。这样的好处是比jdk动态代理通过对目标类方法的反射，即调用Class.forName(xxx).getMethod(xxx)调用目标类的方法要快一些。</br>
+
+字节码底层：cglib是继承目标类和实现工厂接口，jdk动态代理是继承Proxy类和实现目标类的接口。它们最重要的相同点是最终代理类的最终目标方法会调用各自的拦截方法，invoke或者intercept方法。
+
+反射机制还是fastClass机制：cglib的fastClass机制是对目标类的方法设置索引，然后通过索引直接调用目标类的方法。这样的好处是比jdk动态代理通过对目标类方法的反射，即调用Class.forName(xxx).getMethod(xxx)调用目标类的方法要快一些。</br>
+
 #### 8、HashMap的并发问题  
 #### 9、了解LinkedHashMap的应用吗  
 #### 10、反射的原理，反射创建类实例的三种方式是什么？   

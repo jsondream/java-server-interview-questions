@@ -45,6 +45,9 @@ cglib:cglib动态代理的代理类实现MethodInterceptor接口，重写interce
 反射机制还是fastClass机制：cglib的fastClass机制是对目标类的方法设置索引，然后通过索引直接调用目标类的方法。这样的好处是比jdk动态代理通过对目标类方法的反射，即调用Class.forName(xxx).getMethod(xxx)调用目标类的方法要快一些。</br>
 
 #### 8、HashMap的并发问题  
+https://coolshell.cn/articles/9606.html
+当多条线程同时存取操作hashMap时，就可能会出现infinite loop (死循环)，就是当线程之间挂起和执行的链表的指向形成一个环状，就会出现死循环，这个情况出现不是特别明显，是一个隐性的bug,死循环有一个很致命的缺点，就是会让cpu飙升，最后有可能会出现宕机的情况，解决这一问题用hashtable替换或者concurrentHashMap(推荐)替换，或者是使用工具类的包装器，也就是Collections.synchronizedMap()。
+
 #### 9、了解LinkedHashMap的应用吗  
 #### 10、反射的原理，反射创建类实例的三种方式是什么？   
 #### 11、cloneable接口实现原理，浅拷贝or深拷贝   

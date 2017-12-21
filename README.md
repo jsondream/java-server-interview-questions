@@ -45,8 +45,13 @@ cglib:cglib动态代理的代理类实现MethodInterceptor接口，重写interce
 反射机制还是fastClass机制：cglib的fastClass机制是对目标类的方法设置索引，然后通过索引直接调用目标类的方法。这样的好处是比jdk动态代理通过对目标类方法的反射，即调用Class.forName(xxx).getMethod(xxx)调用目标类的方法要快一些。</br>
 
 #### 8、HashMap的并发问题  
-https://coolshell.cn/articles/9606.html
-当多条线程同时存取操作hashMap时，就可能会出现infinite loop (死循环)，就是当线程之间挂起和执行的链表的指向形成一个环状，就会出现死循环，这个情况出现不是特别明显，是一个隐性的bug,死循环有一个很致命的缺点，就是会让cpu飙升，最后有可能会出现宕机的情况，解决这一问题用hashtable替换或者concurrentHashMap(推荐)替换，或者是使用工具类的包装器，也就是Collections.synchronizedMap()。
+分析地址：https://coolshell.cn/articles/9606.html </br>
+当多条线程同时存取操作hashMap时，就可能会出现infinite loop (死循环)，就是当线程之间挂起和执行的链表的指向形成一个环状，就会出现死循环，这个情况出现不是特别明显，是一个隐性的bug,死循环有一个很致命的缺点，就是会让cpu飙升，最后有可能会出现宕机的情况，解决这一问题用hashtable替换或者concurrentHashMap(推荐)替换，或者是使用工具类的包装器，也就是Collections.synchronizedMap()。</br>
+HashMap死循环演示</br>
+假如有两个线程P1、P2，以及链表 a=》b=》null</br>
+1、P1先执行，执行完"Entry<K,V> next = e.next;"代码后发生阻塞，或者其他情况不再执行下去，此时e=a，next=b</br>
+2、而P2已经执行完整段代码，于是当前的新链表newTable[i]为b=》a=》null</br>
+3、P1又继续执行"Entry<K,V> next = e.next;"之后的代码，则执行完"e=next;"后，newTable[i]为a《=》b，则造成回路，while(e!=null)一直死循环</br>
 
 #### 9、了解LinkedHashMap的应用吗  
 #### 10、反射的原理，反射创建类实例的三种方式是什么？   

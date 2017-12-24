@@ -54,7 +54,7 @@ HashMap死循环演示</br>
 3、P1又继续执行"Entry<K,V> next = e.next;"之后的代码，则执行完"e=next;"后，newTable[i]为a《=》b，则造成回路，while(e!=null)一直死循环</br>
 
 #### 9、了解LinkedHashMap的应用吗  
-LinkedHashMap继承HashMap，也就是在HashMap的基础上进一步封装，HashMap是无序的，LinkedHashMap是有序的，因为在HashMap的基础上添加一个双向链表维护，有序迭代可分为访问顺序和插入顺序迭代，一般默认的是插入顺序迭代元素，即属性accessOrder在LinkedHashMap构造函数里设置为false，访问顺序的意思是：只要访问过的元素，先删除，即remove,然后add到双端队列的尾部，迭代的时候会从尾部到头部的顺序依次迭代。
+LinkedHashMap继承HashMap，也就是在HashMap的基础上进一步封装，HashMap是无序的，LinkedHashMap是有序的，因为在HashMap的基础上添加一个双向链表维护，有序迭代可分为访问顺序和插入顺序迭代，一般默认的是插入顺序迭代元素，即属性accessOrder在LinkedHashMap构造函数里设置为false，访问（调用get或者put方法）顺序的意思是：只要访问过的元素，先删除，即remove,然后add到双向链表的尾部，迭代的时候会从尾部到头部的顺序依次迭代。
 #### 10、反射的原理，反射创建类实例的三种方式是什么？ 
 #### 11、cloneable接口实现原理，浅拷贝or深拷贝   
 #### 12、Java NIO使用   

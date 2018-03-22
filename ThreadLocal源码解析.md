@@ -10,7 +10,7 @@ HashMap内部就是使用这种方式解决hash碰撞的，也就是对key进行
 末尾还没有找到空位，就返回头部继续找空位。那这个hash值为什么会这么均匀呢？它是通过automicInteger和一个固定的值累加上去的。添加
 一对key-value,automicInteger就自动加一。
 #### ThreadLocal的应用场景？
-一般是数据库连接的时候和管理Session的时候。因为数据库如何大量连接而且很多是重复的ip地址的话，数据库容易崩溃的。
+* 一般是数据库连接的时候和管理Session的时候。因为数据库如何大量连接而且很多是重复的ip地址的话，数据库容易崩溃的。
 Session也是。
 #### ThreadLocal内存泄漏的原因以及我们应该如何解决？
 *　ThreadLocal内存泄漏的原因是ThreadlocalMap是静态修饰的，生命周期和ThreadLocal一样长，如果用完没有手动删除对应的key就可能导致内存泄漏。

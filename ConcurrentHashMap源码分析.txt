@@ -1,0 +1,74 @@
+package com.testconcurrent;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ChmTest {
+	/**
+	 * 补充二叉树和红黑树相关知识。
+	 * 		二叉树特点：左边子节点（值大小）<= 父节点  <= 右边子节点
+	 * 		二叉树思想：二分查找
+	 *		二叉树缺点：无法保证平衡左右子节点个数，通俗的说：比如左边节点的个数远远大于右边节点的个数。
+	 *		弥补二叉树的缺点：红黑树（可保证根节点到叶节点的最大长度小于等于最小长度的两倍）
+	 *		红黑树保持左右节点个数平衡的五大规则：
+	 *			1、节点不是黑色就是红色的。
+	 *			2、根节点必须是黑色的。
+	 *			3、叶节点（NUL节点或者是空节点）必须是黑色的。
+	 *			4、红色节点下的子节点必须黑色的。                                                                                    （重要，必须记住）
+	 *			5、从任一一个节点向下查找，直到叶节点的所有路径里的黑色节点都相等。                （重要，必须记住）
+	 *		变色：黑色变成红色或者红色变成黑色。
+	 *		旋转方式有两种：
+	 *			左旋：http://img.blog.csdn.net/20170323102309404?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvU3VuX1RUVFQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast
+	 *			右旋：http://img.blog.csdn.net/20170323102237896?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvU3VuX1RUVFQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast
+	 *		原地址：https://blog.csdn.net/sun_tttt/article/details/65445754
+	 *		那什么时候会进行旋转和变色呢？插入和删除元素时，破坏上面五大规则的时候。旋转和变色有可能组合进行，但最终得到的红黑树都必须是符合上面五大规则的。
+	 */
+	public static void main(String[] args) {
+		
+		//概念：在JDK1.7版本中，ConcurrentHashMap的数据结构是由一个Segment数组和多个HashEntry数组组成，即数组+链表+红黑树
+		//Segment数组的意义就是锁分离技术
+		
+		//初始化：
+		//ConcurrentHashMap的初始化是会通过位与运算来初始化Segment的大小，用ssize来表示 ,一般默认ssize = 1;
+		//因为ssize用位于运算来计算（ssize <<=1），所以Segment的大小取值都是以2的N次方
+		//HashEntry大小的计算也是2的N次方（cap <<=1）， cap的初始值为1，所以HashEntry默认最小的容量为2
+		ConcurrentHashMap<Integer, String> chm = new ConcurrentHashMap<Integer, String>();
+		
+		//put操作
+		//第一步：初始化Segment:
+		//Segment实现了ReentrantLock,也就带有锁的功能
+		//当执行put操作时，会进行第一次key的hash来定位Segment的位置，如果该Segment还没有初始化，即通过CAS操作进行赋值
+		//第二步：初始化HashEntry
+		//先找位置：segment的hash值&（ 位与运算）表的长度-1 
+		//然后尝试获取Segment锁，如果获取到，直接插入，如果获取不到，则进行自旋（while(!tryLock())),达到一定的次数，将等待唤醒
+		chm.put(123, "123");
+		
+		//get操作
+		//获取对应的segment的锁，如果没有获取到，则返回null,获取到则通过hash key定位到segment的位置。
+		//然后定位到HashEntry,遍历比较获取值
+		System.err.println(chm.get(123));
+		
+		//size操作(两种方案)
+		//第一种方案：三次获取值比较，相同则没有改变，直接返回
+		//第二种方案：第一种方案不成立，则给所有segment加锁，然后取值，返回
+		System.out.println(chm.size());
+		chm.clear();//调用segment数组的clear方法
+		chm.contains("123");//先上segment锁,在遍历hashEntry的链表
+		chm.containsKey(123);//先上segment锁,在遍历hashEntry的数组
+		//...还有很多方法，这就不一一分析，实现不复杂
+		
+		//jdk1.8和1.7的ConcurrentHashMap的区别
+		//一、1.8的ConcurrentHashMap锁的粒度会更细，1.7的chm(ConcurrentHashMap)采用segment+HashEntry+红黑树实现，
+		//一个segment包含多个HashEntry,锁为segment(继承ReentrantLock)
+		//而1.8将抛弃segment,采用CAS+Node(HashEntry)+synchronized+红黑树实现，锁的粒度为HashEntry
+		
+		//1.8的put方法
+		//是否正在扩容？正在扩容，则先扩容。
+		//是否有hash冲突?即检查插入点有没数据，如果没有数据，则直接CAS插入(调用CompareAndSwapInt方法)，如果有hash冲突，则加锁，等待插入。
+		//插入方式的选择？hashentry的方式有两种，一种是直接插入链表的尾端，另外一种是根据红黑树的特点调整插入，选择那一种方案取决于链表的长度，是否大于等于8
+		//是否需要扩容？多条线程进行扩容。
+		
+		//1.8的get方法
+		//检查是否只有一个头结点？有则直接返回。没有则获取锁，直接遍历返回.
+		//hashentry链表长度不是一的时候，还得检查是否正在扩容？如果是，则调用节点的find方法，遍历之后返回
+	}
+}

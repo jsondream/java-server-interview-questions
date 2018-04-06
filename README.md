@@ -1,8 +1,8 @@
-## java基础   
 
-#### 10、反射的原理，反射创建类实例的三种方式是什么？ 
-#### 11、cloneable接口实现原理，浅拷贝or深拷贝   
-#### 12、Java NIO使用   
+
+10、反射的原理，反射创建类实例的三种方式是什么？ 
+11、cloneable接口实现原理，浅拷贝or深拷贝   
+12、Java NIO使用   
 
 反射中，Class.forName和ClassLoader区别  
 String，Stringbuffer，StringBuilder的区别？   

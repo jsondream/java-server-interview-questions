@@ -6,7 +6,7 @@
 
 #### java.util.DualPivotQuicksort#sort(int[], int, int, boolean)
 
-##### [视屏](https://www.youtube.com/watch?v=yRJ1Zb4pCM4)
+##### [视频](https://www.youtube.com/watch?v=yRJ1Zb4pCM4)
 
 ##### [过程动态图](https://learnforeverlearn.com/yaro_web/)
 

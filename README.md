@@ -1,21 +1,23 @@
 [TOC]
 
-## java基础   
+# java基础/0
 
-### Arrays.sort实现原理和Collections.sort实现原理。
+## Arrays.sort实现原理和Collections.sort实现原理
+
+### Arrays.Sort实现原理
 
 #### java.util.DualPivotQuicksort#sort(int[], int, int, boolean)
 
-##### [视屏](https://www.youtube.com/watch?v=yRJ1Zb4pCM4)
+##### length < 47 
 
-##### [过程动态图](https://learnforeverlearn.com/yaro_web/)
+###### leftmost为ture
 
-##### Use insertion sort on tiny arrays
+> [理解插入排序](https://github.com/Maybrittnelson/technology-demo/tree/feature/6-01/img/sort/insert)
 
 ```java
 // Use insertion sort on tiny arrays 
 if (length < INSERTION_SORT_THRESHOLD) {
-            if (leftmost) {
+            if (leftmost) {//
                 /*
                  * Traditional (without sentinel) insertion sort,
                  * optimized for server VM, is used in case of
@@ -31,7 +33,14 @@ if (length < INSERTION_SORT_THRESHOLD) {
                     }
                     a[j + 1] = ai;
                 }
-            } else {
+        }
+```
+
+###### leftmost为false	
+
+> [理解 pair insertion sort ](https://formal.iti.kit.edu/ulbrich/verifythis2017/challenge1.pdf)
+
+```java
                 /*
                  * Skip the longest ascending sequence.
                  */
@@ -59,8 +68,8 @@ if (length < INSERTION_SORT_THRESHOLD) {
                         a[k + 2] = a[k];
                     }
                     a[++k + 1] = a1;
-				
-                    while (a2 < a[--k]) {//数组会越界
+
+                    while (a2 < a[--k]) {
                         a[k + 1] = a[k];
                     }
                     a[k + 1] = a2;
@@ -71,15 +80,12 @@ if (length < INSERTION_SORT_THRESHOLD) {
                     a[right + 1] = a[right];
                 }
                 a[right + 1] = last;
-            }
-            return;
-        }
 ```
 
-##### 当数组长度大于等于47时
+##### length >= 47 
 
 ```java
-  		// Inexpensive approximation of length / 7
+        // Inexpensive approximation of length / 7
         int seventh = (length >> 3) + (length >> 6) + 1;
 
         /*
@@ -117,8 +123,18 @@ if (length < INSERTION_SORT_THRESHOLD) {
         // Pointers
         int less  = left;  // The index of the first element of center part
         int great = right; // The index before the first element of right part
+```
 
-        if (a[e1] != a[e2] && a[e2] != a[e3] && a[e3] != a[e4] && a[e4] != a[e5]) {
+###### `if` a[e1] != a[e2] && a[e2] != a[e3] && a[e3] != a[e4] && a[e4] != a[e5]
+
+>  [理解双轴快速排序](https://learnforeverlearn.com/yaro_web/)
+>
+> >  [过程动态图](https://learnforeverlearn.com/yaro_web/)
+> >
+> > [视频](https://www.youtube.com/watch?v=yRJ1Zb4pCM4)
+
+```java
+if (a[e1] != a[e2] && a[e2] != a[e3] && a[e3] != a[e4] && a[e4] != a[e5]) {
             /*
              * Use the second and fourth of the five sorted elements as pivots.
              * These values are inexpensive approximations of the first and
@@ -273,13 +289,14 @@ if (length < INSERTION_SORT_THRESHOLD) {
 
             // Sort center part recursively
             sort(a, less, great, false);
+```
 
-        } else { // Partitioning with one pivot
-            /*
-             * Use the third of the five sorted elements as pivot.
-             * This value is inexpensive approximation of the median.
-             */
-            int pivot = a[e3];
+###### `else` a[e1]、a[e2] 、a[e3]、 a[e4] 、a[e5]至少对以上相等
+
+> [理解单轴快速排序](https://github.com/Maybrittnelson/technology-demo/tree/feature/6-01/img/sort/quick)
+
+```java
+int pivot = a[e3];
 
             /*
              * Partitioning degenerates to the traditional 3-way
@@ -341,5 +358,17 @@ if (length < INSERTION_SORT_THRESHOLD) {
              */
             sort(a, left, less - 1, leftmost);
             sort(a, great + 1, right, false);
-        }
 ```
+
+### Collections.sort实现原理
+
+> 传参限制List<T>，且T为<T extends Comparable<? super T>>
+>
+> 下面以ArrayList为例
+
+####size < 32
+
+##### java.util.ComparableTimSort#countRunAndMakeAscending
+
+
+
